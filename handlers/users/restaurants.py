@@ -25,11 +25,14 @@ async def catalog(message: types.Message):
 
 @dp.callback_query_handler(lambda call: "restaurants_" in call.data)
 async def get_category(call: types.CallbackQuery):
-    await call.message.answer(f"Вы перешли в ресторан: {call.data}\n\nВыберите из списка позицию:",
+    name_restaraunt = call.data.split("_")[1]
+    await call.message.answer(f"Вы перешли в ресторан: {name_restaraunt}\n\nВыберите из списка позицию:",
                               reply_markup=await user_kb.restaurants_panel_kb())
     action_restaurants = await db.sql_show_user_action_name_restaurant(call.from_user.id)
     if not action_restaurants:
-        await db.sql_action_user(call.from_user.id, call.data, 'null')
+        await db.sql_action_user(call.from_user.id, name_restaraunt, 'null')
+    else:
+        await db.sql_update_action_user_restaraunt(call.from_user.id, name_restaraunt)
 
 
 @dp.message_handler(text="Меню")
