@@ -331,6 +331,19 @@ class DBApi(object):
         result = f"SELECT user_id FROM career WHERE user_id = {user_id}"
         return self.__cur.execute(result).fetchall()
 
+    async def sql_select_user_action(self, user_id) -> list:
+        result = f"SELECT user_id FROM career WHERE user_id = {user_id}"
+        return self.__cur.execute(result).fetchall()
+
+    """оБНОВЛЕНИЕ ресторана В ТАБЛИЦЕ АКТИВНОСТЬ"""
+    async def sql_update_action_user_restaraunt(self, id_user: int, name_menu) -> None:
+        self.__cur.execute('''
+                        UPDATE actions_user
+                        SET name_restaurant = ?
+                        WHERE id_user = ?
+                    ''', (name_menu, id_user))
+        self.__conn.commit()
+
     """Действия пользователя"""
     async def sql_action_user(self, id_user, name_restaurant, name_menu):
         try:
@@ -349,6 +362,7 @@ class DBApi(object):
             return False
         else:
             return True
+
 
     """оБНОВЛЕНИЕ ДПННЫХ В ТАБЛИЦЕ АКТИВНОСТЬ"""
     async def sql_update_action_user(self, id_user: int,  name_menu) -> None:
