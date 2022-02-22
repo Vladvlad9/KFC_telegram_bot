@@ -13,11 +13,11 @@ async def coupons_start(message: types.Message):
                          reply_markup=await coupons_inline())
 
 
-"""Измененеый вывод купона"""
+"""Измененеый вывод купона c количеством"""
 async def update_num_text(message: types.Message, new_value: int, name_prod, price):
     await message.edit_text(f'<b>Цена:</b>{price}\n\n'
                             f'<b>Количество:</b> {new_value}',
-                            reply_markup=await get_coupons_keyboard_inline(price, name_prod),
+                            reply_markup=await get_coupons_keyboard_inline(name_prod, price),
                             parse_mode="HTML")
 
 
@@ -32,7 +32,7 @@ async def show_coupons(call: types.CallbackQuery):
     for i in counpons:
         await call.message.answer_photo(i[1], reply_markup=markup)
         await call.message.answer(f'<b>Цена:</b>{i[3]}\n\n',
-                                  reply_markup=await get_coupons_keyboard_inline(i[3], i[2]),
+                                  reply_markup=await get_coupons_keyboard_inline(i[2], i[3]),
                                   parse_mode="HTML")
 
 
@@ -54,7 +54,7 @@ async def coupons_add(call: types.CallbackQuery):
         await call.answer(f"Вы успешно добавили Купон {name_coupons} в корзину", show_alert=False)
 
 
-@dp.callback_query_handler(Text(startswith="num_"))
+@dp.callback_query_handler(Text(startswith="coup_"))
 async def callbacks_num(call: types.CallbackQuery):
     user_value = user_data.get(call.from_user.id, 1)
     action = call.data.split("_")[1]
