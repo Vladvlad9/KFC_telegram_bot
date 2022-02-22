@@ -11,6 +11,14 @@ async def coupons_start(message: types.Message):
                          reply_markup=await coupons_inline())
 
 
+"""Измененеый вывод купона"""
+async def update_num_text(message: types.Message, new_value: int, name_prod, price):
+    await message.edit_text(f'<b>Цена:</b>{price}\n\n'
+                            f'<b>Количество:</b> {new_value}',
+                            reply_markup=await restaurants.get_product_keyboard_inline(price, name_prod),
+                            parse_mode="HTML")
+
+"""Первоначальный вывод купона"""
 @dp.callback_query_handler(lambda call: "coupons" in call.data)
 async def show_coupons(call: types.CallbackQuery):
     counpons = await db.sql_show_coupons()
