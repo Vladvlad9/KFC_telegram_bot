@@ -1,7 +1,7 @@
 from aiogram import types
 
 from keyboards.inline.user import restaurants, confirm_order_inline_keyboard, delete_prod_inline_keyboard
-from loader import dp, db
+from loader import dp, db, bot
 
 
 @dp.message_handler(text="Корзина")
@@ -65,6 +65,12 @@ async def catalog(message: types.Message):
 
 @dp.callback_query_handler(lambda call: "confirm_" in call.data)
 async def confirm_basket_user(message: types.Message):
+    name_res = await db.sql_show_user_action_name_restaurant(message.from_user.id)#вывод определенного ресторана
+    restaurant = await db.get_current_restaurants(name_res[0])#вывод информации о определенном ресторане
+    chanelID = restaurant[0][3]
+
+
+
     confirm = await db.sql_delete_basket_user(message.from_user.id)
     all_name_prod = await db.sql_user_nameProd_Com_user_compound(message.from_user.id)
     if all_name_prod != '':
@@ -72,6 +78,7 @@ async def confirm_basket_user(message: types.Message):
 
     if not confirm:
         await message.answer("Вы потвердили заказ: ")
+        await bot.send_message(chanelID, 'hello')
 
 
 @dp.callback_query_handler(lambda call: "del_" in call.data)
