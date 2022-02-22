@@ -220,6 +220,12 @@ class DBApi(object):
         ''')
         return tuple([category[0] for category in self.__cur.fetchall()])
 
+    """Вывод вывод определенного ресторана"""
+    async def get_current_restaurants(self, name_restaurants) -> list:
+        request_all_menu = f'SELECT * FROM restaurants WHERE name_restaurants = "{name_restaurants[0]}"'
+        result_request_all_menu = self.__cur.execute(request_all_menu).fetchall()
+        return result_request_all_menu
+
     """Вывод всего меню на русском языке"""
     async def get_menu(self) -> tuple:
         """GET ALL menu"""
