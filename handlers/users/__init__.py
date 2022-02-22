@@ -3,7 +3,7 @@ from .help import dp
 
 from .basket import dp
 from .company import dp
-from .coupons import dp
+from .coupon import dp
 from .restaurants import dp
 from .career import dp
 from .review import dp
