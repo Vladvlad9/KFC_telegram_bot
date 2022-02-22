@@ -40,8 +40,6 @@ async def catalog(message: types.Message):
     )
 
 
-async def price(message: types.Message, new_value: int):
-    return await message.edit_text(f"Количество: {new_value}")
 
 
 user_data = {}
@@ -163,6 +161,7 @@ async def callbacks_num(call: types.CallbackQuery):
     name_prod = call.data.split('_')[2]
     price = call.data.split('_')[3]
     user_id = call.from_user.id
+
     curent_table = await db.sql_show_user_action_name_name_menu(call.from_user.id)
     current_product = await db.get_current_product(curent_table[0], name_prod)
 
